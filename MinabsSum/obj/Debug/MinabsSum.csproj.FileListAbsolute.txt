@@ -1,0 +1,5 @@
+C:\Users\jlagunas\source\repos\MinabsSum\MinabsSum\bin\Debug\MinabsSum.exe
+C:\Users\jlagunas\source\repos\MinabsSum\MinabsSum\bin\Debug\MinabsSum.pdb
+C:\Users\jlagunas\source\repos\MinabsSum\MinabsSum\obj\Debug\MinabsSum.csprojAssemblyReference.cache
+C:\Users\jlagunas\source\repos\MinabsSum\MinabsSum\obj\Debug\MinabsSum.exe
+C:\Users\jlagunas\source\repos\MinabsSum\MinabsSum\obj\Debug\MinabsSum.pdb

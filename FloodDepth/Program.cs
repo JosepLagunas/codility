@@ -10,43 +10,64 @@ namespace FloodDepth
     {
         static void Main(string[] args)
         {
-            var A = new[] { 1, 3, 2, 1, 2, 1, 5, 3, 3, 4, 2 };
+            var A = new[] {1, 3, 2, 1, 2, 1, 5, 3, 3, 4, 2};
 
             var maxDepth = FindMaxDepth(A);
+            Console.WriteLine(maxDepth);
+
+            A = new[] {8, 5, 8};
+            maxDepth = FindMaxDepth(A);
+            Console.WriteLine(maxDepth);
+
+            A = new[] {10, 1, 2, 20};
+            maxDepth = FindMaxDepth(A);
+            Console.WriteLine(maxDepth);
+
+            A = new[] {333, 1, 25, 4, 12, 3};
+            maxDepth = FindMaxDepth(A);
             Console.WriteLine(maxDepth);
         }
 
         private static int FindMaxDepth(IReadOnlyList<int> A)
         {
-            return FindMaxDepthRec(A, 0, int.MaxValue, 0, 0);
+            return FindMaxDepthRec(A, 0, int.MaxValue, int.MinValue, 0, 0);
         }
 
         private static int FindMaxDepthRec(IReadOnlyList<int> A, int leftMaxHeightPos,
-            int sectionLowerHeight, int maxDepth, int index)
+            int sectionLowerHeight, int higherInSection, int maxDepth, int index)
         {
             if (index == A.Count) return maxDepth;
 
-            if (A[index] >= A[leftMaxHeightPos] && leftMaxHeightPos == 0)
+            if (index - leftMaxHeightPos <= 1)
             {
-                leftMaxHeightPos = index;
-                return FindMaxDepthRec(A, leftMaxHeightPos, sectionLowerHeight, maxDepth, index + 1);
+                if (A[index] > A[leftMaxHeightPos] || index == leftMaxHeightPos)
+                {
+                    leftMaxHeightPos = index;
+                    higherInSection = int.MinValue;
+                }
+                else
+                {
+                    sectionLowerHeight = Math.Min(sectionLowerHeight, A[index]);
+                    higherInSection = Math.Max(higherInSection, A[index]);
+                }
+
+                return FindMaxDepthRec(A, leftMaxHeightPos, sectionLowerHeight, higherInSection,
+                    maxDepth, index + 1);
             }
 
-            if (index - leftMaxHeightPos <= 1)
-                return FindMaxDepthRec(A, leftMaxHeightPos, sectionLowerHeight, maxDepth,
-                    index + 1);
-            
-            if (A[index] >= A[leftMaxHeightPos])
+            if (A[index] > higherInSection) //right boundary found
             {
                 var heightForDepthCalculation = Math.Min(A[leftMaxHeightPos], A[index]);
-                sectionLowerHeight =
-                    Math.Min(sectionLowerHeight, A[index]);
-                maxDepth = Math.Max(maxDepth, sectionLowerHeight);
-                return FindMaxDepthRec(A, index, sectionLowerHeight, maxDepth, index + 1);
+                
+                maxDepth = Math.Max(maxDepth, heightForDepthCalculation - sectionLowerHeight);
+
+                return FindMaxDepthRec(A, index, int.MaxValue, int.MinValue, maxDepth, index + 1);
             }
 
             sectionLowerHeight = Math.Min(sectionLowerHeight, A[index]);
-            return FindMaxDepthRec(A, leftMaxHeightPos, sectionLowerHeight, maxDepth,
+            higherInSection = Math.Max(higherInSection, A[index]);
+            return FindMaxDepthRec(A, leftMaxHeightPos, sectionLowerHeight, higherInSection,
+                maxDepth,
                 index + 1);
         }
     }
